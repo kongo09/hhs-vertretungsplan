@@ -17,7 +17,7 @@ class HHSVertretungsplanParser:
         self.session = session
         self.user = user
         self.password = password
-        self.vertretungen = List[Vertretung]
+        self.vertretungen = None
     
 
     async def load_data(self) -> None:
