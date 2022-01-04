@@ -111,7 +111,7 @@ class HHSVertretungsplanParser:
         for item in items:
             entries = item.select('td')
             vertretung = Vertretung()
-            vertretung.datum = date
+            vertretung.datum = date.strftime("%Y-%m-%d")
             vertretung.klasse = entries[0].string.strip()
             vertretung.stunde = entries[1].string.strip()
             vertretung.vertreter = entries[2].string.strip()

@@ -1,11 +1,10 @@
 """Vertretung representation with all properties."""
 from dataclasses import dataclass
-import datetime
 
 
 @dataclass
 class Vertretung:
-    datum: datetime.date = None
+    datum: str = None
     klasse: str = None
     stunde: str = None
     vertreter: str = None

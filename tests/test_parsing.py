@@ -1,4 +1,5 @@
 import datetime
+from dataclasses import dataclass
 from typing import Any
 from aiohttp import payload
 import pytest
@@ -49,4 +50,4 @@ def _validate_vertretung(hhs: HHSVertretungsplanParser) -> None:
     assert first_7f.raum == "B121"
     assert first_7f.nach == ""
     assert first_7f.text == ""
-    assert first_7f.datum == datetime.date(2021, 12, 22)
+    assert first_7f.datum == "2021-12-22"

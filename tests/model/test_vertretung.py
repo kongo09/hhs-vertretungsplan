@@ -5,7 +5,7 @@ from hhs_vertretungsplan_parser.model.vertretung import Vertretung
 @pytest.mark.asyncio
 async def test_vertretung():
     vertretung = Vertretung()
-    vertretung.datum = datetime.date(2021, 12, 22)
+    vertretung.datum = "2021-12-22"
     vertretung.klasse = "5g"
     vertretung.stunde = "1 - 2"
     vertretung.vertreter = "Hz"

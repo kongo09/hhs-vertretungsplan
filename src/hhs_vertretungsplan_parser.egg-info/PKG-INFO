@@ -7,7 +7,7 @@ Author: kongo09
 Author-email: kongo09@gmail.com
 License: MIT License
 Project-URL: Bug Tracker, https://github.com/kongo09/hhs-vertretungsplan/issues
-Keywords: dell,printer
+Keywords: hhs
 Platform: UNKNOWN
 Requires-Python: !=2.*,>=3.6
 Description-Content-Type: text/markdown
