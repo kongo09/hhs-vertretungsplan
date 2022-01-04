@@ -1,14 +1,11 @@
-import datetime
 from dataclasses import dataclass
 from typing import Any
-from aiohttp import payload
 import pytest
 import aiohttp
 from aioresponses import aioresponses
 
 from hhs_vertretungsplan_parser.const import BASE_URL, LOGIN_URL
 from hhs_vertretungsplan_parser.vertretungsplan_parser import HHSVertretungsplanParser
-from hhs_vertretungsplan_parser.model.vertretung import Vertretung
 
 SUBST001_URL = BASE_URL + "vertretungsplan/subst_001.htm"
 SUBST002_URL = BASE_URL + "vertretungsplan/subst_002.htm"
