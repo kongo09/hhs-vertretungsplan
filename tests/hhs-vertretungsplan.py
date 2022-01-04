@@ -12,4 +12,7 @@ async def main(user: str, password: str):
 
 if (__name__ == '__main__'):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    asyncio.run(main(sys.argv[0], sys.argv[1]))
+    if len(sys.argv) == 3:
+        asyncio.run(main(sys.argv[1], sys.argv[2]))
+    else:
+        print(f"usage: python hhs-vertretungsplan.py <user> <password>")
