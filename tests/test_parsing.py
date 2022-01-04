@@ -1,3 +1,5 @@
+import datetime
+from typing import Any
 from aiohttp import payload
 import pytest
 import aiohttp
@@ -36,3 +38,15 @@ async def test_parsing_with_fake_data(
 def _validate_vertretung(hhs: HHSVertretungsplanParser) -> None:
     """Validate Vertretung against fixture."""
     assert len(hhs.vertretungen) == 18
+
+    """Pick one class to check details."""
+    _7f_list = list(filter(lambda vertretung: vertretung.klasse == '7f', hhs.vertretungen))
+    first_7f = _7f_list[0]
+    assert first_7f.klasse == "7f"
+    assert first_7f.stunde == "1"
+    assert first_7f.vertreter == "Lnd"
+    assert first_7f.fach == "D_7"
+    assert first_7f.raum == "B121"
+    assert first_7f.nach == ""
+    assert first_7f.text == ""
+    assert first_7f.datum == datetime.date(2021, 12, 22)
