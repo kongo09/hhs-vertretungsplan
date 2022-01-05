@@ -1,8 +1,10 @@
 """Parse responses from Heinrich-Hertz-Schule Vertretungsplan interface."""
 from datetime import datetime
 import re
+import dateparser
 from typing import Dict, List
 from bs4 import BeautifulSoup as bs
+
 
 import aiohttp
 
@@ -103,23 +105,30 @@ class HHSVertretungsplanParser:
         soup = bs(data, 'html.parser')
 
         date_text = soup.select_one('div.mon_title').string
-        date = datetime.strptime(date_text[:10], '%-d.%-m.%Y').date()
+        date = dateparser.parse(date_text, languages=["de"])
 
         items = soup.select('tr.list.odd,tr.list.even')
         vertretungen = []
 
         for item in items:
             entries = item.select('td')
-            vertretung = Vertretung()
-            vertretung.datum = date.strftime("%Y-%m-%d")
-            vertretung.klasse = entries[0].string.strip()
-            vertretung.stunde = entries[1].string.strip()
-            vertretung.vertreter = entries[2].string.strip()
-            vertretung.fach = entries[3].string.strip()
-            vertretung.raum = entries[4].string.strip()
-            vertretung.text = entries[5].string.strip()
-            vertretung.nach = entries[6].string.strip()
-            vertretungen.append(vertretung)
+            """Sometimes there is more than one tutor group per table line."""
+            tutor_group_string = entries[0].string.strip()
+            tutor_group_list = tutor_group_string.split(", ")
+
+            for tutor_group in tutor_group_list:
+                vertretung = Vertretung()
+                if len(tutor_group) == 0:
+                    tutor_group = 'alle'
+                vertretung.datum = date.strftime("%Y-%m-%d")
+                vertretung.klasse = tutor_group
+                vertretung.stunde = entries[1].string.strip()
+                vertretung.vertreter = entries[2].string.strip()
+                vertretung.fach = entries[3].string.strip()
+                vertretung.raum = entries[4].string.strip()
+                vertretung.text = entries[5].string.strip()
+                vertretung.nach = entries[6].string.strip()
+                vertretungen.append(vertretung)
         
         return vertretungen
 
