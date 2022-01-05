@@ -8,7 +8,7 @@ async def main(user: str, password: str):
         hhs = HHSVertretungsplanParser(session, user, password)
         await hhs.load_data()
         for vertretung in hhs.vertretungen:
-            print(f"Klasse {vertretung.klasse} hat am {vertretung.datum} in Stunde {vertretung.stunde} im Fach {vertretung.fach} bei {vertretung.vertreter} Vertretung.")
+            print(f"Klasse {vertretung.klasse} hat am {vertretung.datum} in Stunde {vertretung.stunde} im Fach {vertretung.fach} bei {vertretung.vertreter} Vertretung. Hinweise: {vertretung.text} / {vertretung.nach}")
 
 if (__name__ == '__main__'):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
