@@ -103,7 +103,7 @@ class HHSVertretungsplanParser:
         soup = bs(data, 'html.parser')
 
         date_text = soup.select_one('div.mon_title').string
-        date = datetime.strptime(date_text[:10], '%d.%m.%Y').date()
+        date = datetime.strptime(date_text[:10], '%-d.%-m.%Y').date()
 
         items = soup.select('tr.list.odd,tr.list.even')
         vertretungen = []
