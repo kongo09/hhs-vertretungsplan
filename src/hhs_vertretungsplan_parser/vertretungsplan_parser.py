@@ -111,12 +111,12 @@ class HHSVertretungsplanParser:
             header_text = soup.select_one('table.mon_head td:nth-of-type(3)')
             time_string = header_text.contents[1].contents[8]
             time_string = str(time_string).strip().removeprefix('Stand: ')
-            time = dateparser.parse(time_string, languages=["de"])
+            time = dateparser.parse(time_string, date_formats=['%d.%m.%Y %H:%M'], languages=['de'])
             self.status = time.strftime("%Y-%m-%d %H:%M")
 
         """Now the heavy lifting."""
         date_text = soup.select_one('div.mon_title').string
-        date = dateparser.parse(date_text, languages=["de"])
+        date = dateparser.parse(date_text, date_formats=['%-d.%-m.%Y %A'], languages=['de'])
 
         items = soup.select('tr.list.odd,tr.list.even')
         vertretungen = []
