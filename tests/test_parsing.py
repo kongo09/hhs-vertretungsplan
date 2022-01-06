@@ -36,6 +36,7 @@ async def test_parsing_with_fake_data(
 def _validate_vertretung(hhs: HHSVertretungsplanParser) -> None:
     """Validate Vertretung against fixture."""
     assert len(hhs.vertretungen) == 18
+    assert hhs.status == "2021-12-22 07:18"
 
     """Pick one class to check details."""
     _7f_list = list(filter(lambda vertretung: vertretung.klasse == '7f', hhs.vertretungen))

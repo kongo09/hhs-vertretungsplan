@@ -2,13 +2,14 @@
 from datetime import datetime
 import re
 import dateparser
+from dateparser.search import search_dates
 from typing import Dict, List
 from bs4 import BeautifulSoup as bs
 
 
 import aiohttp
 
-from hhs_vertretungsplan_parser.const import BASE_URL, LOGIN_TEXT, LOGIN_URL
+from hhs_vertretungsplan_parser.const import BASE_URL, KEY_ALLE, LOGIN_TEXT, LOGIN_URL
 
 from hhs_vertretungsplan_parser.model.vertretung import Vertretung
 
@@ -20,6 +21,7 @@ class HHSVertretungsplanParser:
         self.user = user
         self.password = password
         self.vertretungen = None
+        self.status: str = None
     
 
     async def load_data(self) -> None:
@@ -104,6 +106,15 @@ class HHSVertretungsplanParser:
         """Extract the data from the table and organize in a list."""
         soup = bs(data, 'html.parser')
 
+        """Check only once for the status."""
+        if self.status == None:
+            header_text = soup.select_one('table.mon_head td:nth-of-type(3)')
+            time_string = header_text.contents[1].contents[8]
+            time_tuple = search_dates(time_string, languages=["de"])
+            time = time_tuple[0][1]
+            self.status = time.strftime("%Y-%m-%d %H:%M")
+
+        """Now the heavy lifting."""
         date_text = soup.select_one('div.mon_title').string
         date = dateparser.parse(date_text, languages=["de"])
 
@@ -119,7 +130,7 @@ class HHSVertretungsplanParser:
             for tutor_group in tutor_group_list:
                 vertretung = Vertretung()
                 if len(tutor_group) == 0:
-                    tutor_group = 'alle'
+                    tutor_group = KEY_ALLE
                 vertretung.datum = date.strftime("%Y-%m-%d")
                 vertretung.klasse = tutor_group
                 vertretung.stunde = entries[1].string.strip()
