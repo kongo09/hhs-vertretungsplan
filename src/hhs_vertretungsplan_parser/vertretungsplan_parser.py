@@ -110,8 +110,8 @@ class HHSVertretungsplanParser:
         if self.status == None:
             header_text = soup.select_one('table.mon_head td:nth-of-type(3)')
             time_string = header_text.contents[1].contents[8]
-            time_tuple = search_dates(time_string, languages=["de"])
-            time = time_tuple[0][1]
+            time_string = str(time_string).strip().removeprefix('Stand: ')
+            time = dateparser.parse(time_string, languages=["de"])
             self.status = time.strftime("%Y-%m-%d %H:%M")
 
         """Now the heavy lifting."""
