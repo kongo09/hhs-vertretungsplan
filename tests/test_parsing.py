@@ -36,7 +36,7 @@ async def test_parsing_with_fake_data(
 def _validate_vertretung(hhs: HHSVertretungsplanParser) -> None:
     """Validate Vertretung against fixture."""
     assert len(hhs.vertretungen) == 18
-    assert hhs.status == "2021-12-22 07:18"
+    assert hhs.status == "2021-12-22T07:18:00+01:00"
 
     """Pick one class to check details."""
     _7f_list = list(filter(lambda vertretung: vertretung.klasse == '7f', hhs.vertretungen))
@@ -48,4 +48,4 @@ def _validate_vertretung(hhs: HHSVertretungsplanParser) -> None:
     assert first_7f.raum == "B121"
     assert first_7f.nach == ""
     assert first_7f.text == ""
-    assert first_7f.datum == "2021-12-22"
+    assert first_7f.datum == "2021-12-22T00:00:00+01:00"

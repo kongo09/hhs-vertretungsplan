@@ -1,5 +1,5 @@
 """Parse responses from Heinrich-Hertz-Schule Vertretungsplan interface."""
-from datetime import datetime
+from datetime import datetime, timezone
 import re
 import dateparser
 from dateparser.search import search_dates
@@ -112,7 +112,7 @@ class HHSVertretungsplanParser:
             time_string = header_text.contents[1].contents[8]
             time_string = str(time_string).strip().removeprefix('Stand: ')
             time = dateparser.parse(time_string, date_formats=['%d.%m.%Y %H:%M'], languages=['de'])
-            self.status = time.strftime("%Y-%m-%d %H:%M")
+            self.status = time.astimezone().isoformat()
 
         """Now the heavy lifting."""
         date_text = soup.select_one('div.mon_title').string
@@ -131,7 +131,7 @@ class HHSVertretungsplanParser:
                 vertretung = Vertretung()
                 if len(tutor_group) == 0:
                     tutor_group = KEY_ALLE
-                vertretung.datum = date.strftime("%Y-%m-%d")
+                vertretung.datum = date.astimezone().isoformat()
                 vertretung.klasse = tutor_group
                 vertretung.stunde = entries[1].string.strip()
                 vertretung.vertreter = entries[2].string.strip()
