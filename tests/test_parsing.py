@@ -4,7 +4,7 @@ import pytest
 import aiohttp
 from aioresponses import aioresponses
 
-from hhs_vertretungsplan_parser.const import BASE_URL, LOGIN_URL
+from hhs_vertretungsplan_parser.const import BASE_URL, LOGIN_URL, KEY_ALLE
 from hhs_vertretungsplan_parser.vertretungsplan_parser import HHSVertretungsplanParser
 
 SUBST001_URL = BASE_URL + "vertretungsplan/subst_001.htm"
@@ -35,17 +35,25 @@ async def test_parsing_with_fake_data(
 
 def _validate_vertretung(hhs: HHSVertretungsplanParser) -> None:
     """Validate Vertretung against fixture."""
-    assert len(hhs.vertretungen) == 18
-    assert hhs.status == "2021-12-22T07:18:00+01:00"
+    assert len(hhs.vertretungen) == 106
+    assert hhs.status == "2022-01-10T07:17:00+01:00"
 
     """Pick one class to check details."""
-    _7f_list = list(filter(lambda vertretung: vertretung.klasse == '7f', hhs.vertretungen))
-    first_7f = _7f_list[0]
-    assert first_7f.klasse == "7f"
-    assert first_7f.stunde == "1"
-    assert first_7f.vertreter == "Lnd"
-    assert first_7f.fach == "D_7"
-    assert first_7f.raum == "B121"
-    assert first_7f.nach == ""
-    assert first_7f.text == ""
-    assert first_7f.datum == "2021-12-22T00:00:00+01:00"
+    _6d_list = list(filter(lambda vertretung: vertretung.klasse == '6d', hhs.vertretungen))
+    first_6d = _6d_list[0]
+    assert first_6d.klasse == "6d"
+    assert first_6d.stunde == "1"
+    assert first_6d.vertreter == "Lor"
+    assert first_6d.fach == "Sopäd DB"
+    assert first_6d.raum == "A109"
+    assert first_6d.nach == ""
+    assert first_6d.text == ""
+    assert first_6d.datum == "2022-01-10T00:00:00+01:00"
+
+    """Check for Jahrgang."""
+    total_6 = '6' + KEY_ALLE
+    assert 1 == len(list(filter(lambda vertretung: vertretung.klasse == total_6, hhs.vertretungen)))
+
+    """Check for Alle Klassen."""
+    assert 1 == len(list(filter(lambda vertretung: vertretung.klasse == KEY_ALLE, hhs.vertretungen)))
+

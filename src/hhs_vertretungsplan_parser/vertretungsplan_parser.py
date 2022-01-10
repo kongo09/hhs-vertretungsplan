@@ -27,6 +27,7 @@ class HHSVertretungsplanParser:
     async def load_data(self) -> None:
         """Load all data and merge results."""
         overview_page = await self._login()
+        self.status = None
         await self._load_vertretungen(overview_page)
 
 
@@ -131,6 +132,8 @@ class HHSVertretungsplanParser:
                 vertretung = Vertretung()
                 if len(tutor_group) == 0:
                     tutor_group = KEY_ALLE
+                elif '.J' in tutor_group:
+                    tutor_group = ''.join(filter(str.isdigit, tutor_group)) + KEY_ALLE
                 vertretung.datum = date.astimezone().isoformat()
                 vertretung.klasse = tutor_group
                 vertretung.stunde = entries[1].string.strip()
